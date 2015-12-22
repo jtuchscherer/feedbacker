@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-signin-scope" content="email">
+    <meta name="google-signin-client_id"
+          content="830829079781-af3mq0bevd7jk1c0j7fb5aab2qb1m8bo.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="template.css">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <div id="signin" class="sign g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+            <a id="signout" class="sign" href="#" onclick="signOut();">Sign out</a>
+            <a class="navbar-brand" href="#">Feedbacker</a>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container">
+    <div>
+        <h1 id="header">Feedbacker</h1>
+        <h2 id="unallocatedPointsContainer">Unallocated Points: <span id="unallocatedPoints"></span></h2>
+        <h1 id="teammates">TeamMates</h1>
+        <div class="container" id="mates"></div>
+    </div>
+</div>
+
+<script>
+    var profile;
+    var unallocatedPoints;
+    var updatedTextField;
+    var pointField;
+
+    window.onload = function () {
+        $("#teammates").hide();
+        $("#signout").hide();
+        $("#unallocatedPointsContainer").hide()
+
+        $("#header").show();
+    };
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+        });
+        $("#header").show();
+        $("#signin").show();
+        $("#teammates").hide();
+        $("#signout").hide();
+        hideTeamMates();
+        hideUnallocatedPoints();
+    }
+
+    function showTeamMates(data) {
+        $("#teammates").show();
+        $("#header").hide();
+        $("#mates").append('<div class="row header"><div class="col-md-4">Name</div><div class="col-md-4">Points</div><div class="col-md-4">Action</div></div>')
+        $.each($.parseJSON(data), function(index, elem){
+            if (elem.Email === profile.getEmail()) {
+                $("#mates").append('<div class="row"><div class="col-md-4">' + elem.Name + '</div><div class="col-md-4">' + elem.ReceivedPts + '</div><div class="col-md-4"></div></div>')
+            } else {
+                $("#mates").append('<div class="row">' + '' +
+                        '<div class="col-md-4">' + elem.Name + '</div>' +
+                        '<div class="points col-md-4">' + elem.ReceivedPts + '</div>' +
+                        '<div class="col-md-4">'+
+                            '<div class="formContainer input-group input-group-sm">' +
+                                '<input type="text" class="form-control" placeholder="Add Points"/>' +
+                                '<div class="input-group-btn"><button type="button" data-email="' + elem.Email + '" class="pointAssigner btn btn-success btn-sm ">Assign points</button></div></div></div></div>')
+            }
+        });
+        $(".pointAssigner").click(function(event){
+            button = event.target;
+            email = button.dataset.email;
+            updatedTextField = $(button).parents(".formContainer").find("input.form-control")[0];
+            pointField = $(updatedTextField).parents(".row").find(".points")[0];
+            points = $(button).parents(".formContainer").find("input.form-control")[0].value;
+            console.log(points);
+            console.log(unallocatedPoints)
+            if (parseInt(points) > parseInt(unallocatedPoints)) {
+                alert("You do not have enough points");
+            } else {
+                $.ajax("http://localhost:3000/allocatePoints?giver=" + profile.getEmail() + "&receiver=" + email + "&points=" + points).done(updatePoints)
+            }
+        });
+    }
+
+    function updatePoints(data) {
+        $(updatedTextField)[0].value = "";
+        $(pointField).html(data);
+        $.ajax("http://localhost:3000/showUnallocatedPoints?email=" + profile.getEmail()).done(showUnallocatedPoints)
+        console.log(data)
+    }
+
+    function showUnallocatedPoints(data) {
+        unallocatedPoints = data;
+        $("#unallocatedPoints").html(data)
+        $("#unallocatedPointsContainer").show()
+    }
+
+    function hideTeamMates() {
+        $("#mates").empty()
+    }
+
+    function hideUnallocatedPoints() {
+        $("#unallocatedPoints").empty()
+        $("#unallocatedPointsContainer").hide()
+    }
+
+    function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        profile = googleUser.getBasicProfile();
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+        $("#signin").hide();
+        $("#signout").show();
+        $.ajax("http://localhost:3000/showTeamMates").done(showTeamMates)
+        $.ajax("http://localhost:3000/showUnallocatedPoints?email=" + profile.getEmail()).done(showUnallocatedPoints)
+
+    }
+</script>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+</body>
+</html>

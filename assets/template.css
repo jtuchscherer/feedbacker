@@ -1,0 +1,17 @@
+body {
+    padding-top: 50px;
+}
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+.sign {
+    float: right;
+    padding-top: 7px;
+    padding-right: 13px;
+}
+
+.header {
+   font-weight: bolder;
+}
