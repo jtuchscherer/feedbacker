@@ -1,0 +1,54 @@
+{
+	"ImportPath": "github.com/jtuchscherer/feedbacker",
+	"GoVersion": "go1.5.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/camlistore/lock",
+			"Rev": "ae27720f340952636b826119b58130b9c1a847a0"
+		},
+		{
+			"ImportPath": "github.com/cznic/b",
+			"Rev": "01b13d79526a9ce9aa2c6e11d6bd4540205e4c03"
+		},
+		{
+			"ImportPath": "github.com/cznic/bufs",
+			"Rev": "3dcccbd7064a1689f9c093a988ea11ac00e21f51"
+		},
+		{
+			"ImportPath": "github.com/cznic/exp/lldb",
+			"Rev": "c21cce1fce3e6e5bc84854aa3d02a808de44229b"
+		},
+		{
+			"ImportPath": "github.com/cznic/fileutil",
+			"Rev": "1c9c88fbf552b3737c7b97e1f243860359687976"
+		},
+		{
+			"ImportPath": "github.com/cznic/mathutil",
+			"Rev": "a804f0f2d8521e22d6adabf02cbec61dc1f9dbd2"
+		},
+		{
+			"ImportPath": "github.com/cznic/ql",
+			"Rev": "aeaeb4334c8cf0666173d53fd7a6cbc368aeafbf"
+		},
+		{
+			"ImportPath": "github.com/cznic/sortutil",
+			"Rev": "4c7342852e65c2088c981288f2c5610d10b9f7f4"
+		},
+		{
+			"ImportPath": "github.com/cznic/strutil",
+			"Rev": "1eb03e3cc9d345307a45ec82bd3016cde4bd4464"
+		},
+		{
+			"ImportPath": "github.com/cznic/zappy",
+			"Rev": "47331054e4f96186e3ff772877c0443909368a45"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "1c83b3eabd45b6d76072b66b746c20815fb2872d"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "9c068cf16d982f8bd444b8c352acbeec34c4fe5b"
+		}
+	]
+}

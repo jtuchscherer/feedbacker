@@ -8,7 +8,9 @@ import (
 
 	"encoding/json"
 	"os"
-	"github.com/gorilla/mux"
+
+	_ "github.com/jtuchscherer/feedbacker/Godeps/_workspace/src/github.com/cznic/ql/driver"
+	"github.com/jtuchscherer/feedbacker/Godeps/_workspace/src/github.com/gorilla/mux"
 )
 
 type employee struct {
@@ -21,6 +23,7 @@ type employee struct {
 var mdb *sql.DB
 
 func main() {
+	fmt.Println("About to start")
 	port := os.Getenv("PORT")
 	var err error
 	mdb, err = sql.Open("ql", "memory://mem.db")
