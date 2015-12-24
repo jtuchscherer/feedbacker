@@ -88,7 +88,7 @@
             if (parseInt(points) > parseInt(unallocatedPoints)) {
                 alert("You do not have enough points");
             } else {
-                $.ajax("http://localhost:3000/allocatePoints?giver=" + profile.getEmail() + "&receiver=" + email + "&points=" + points).done(updatePoints)
+                $.ajax("/allocatePoints?giver=" + profile.getEmail() + "&receiver=" + email + "&points=" + points).done(updatePoints)
             }
         });
     }
@@ -96,7 +96,7 @@
     function updatePoints(data) {
         $(updatedTextField)[0].value = "";
         $(pointField).html(data);
-        $.ajax("http://localhost:3000/showUnallocatedPoints?email=" + profile.getEmail()).done(showUnallocatedPoints)
+        $.ajax("/showUnallocatedPoints?email=" + profile.getEmail()).done(showUnallocatedPoints)
         console.log(data)
     }
 
@@ -125,8 +125,8 @@
         console.log("ID Token: " + id_token);
         $("#signin").hide();
         $("#signout").show();
-        $.ajax("http://localhost:3000/showTeamMates").done(showTeamMates)
-        $.ajax("http://localhost:3000/showUnallocatedPoints?email=" + profile.getEmail()).done(showUnallocatedPoints)
+        $.ajax("/showTeamMates").done(showTeamMates)
+        $.ajax("/showUnallocatedPoints?email=" + profile.getEmail()).done(showUnallocatedPoints)
 
     }
 </script>
